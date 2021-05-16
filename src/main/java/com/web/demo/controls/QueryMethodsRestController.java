@@ -2,6 +2,7 @@ package com.web.demo.controls;
 
 import com.web.demo.entities.CountriesEntity;
 import com.web.demo.entities.CropInsurance;
+import com.web.demo.services.CommonService;
 import com.web.demo.services.IQueryMethodsService;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ public class QueryMethodsRestController {
 
     @Autowired
     private IQueryMethodsService iQueryMethodsService;
+    @Autowired
+    private CommonService commonService;
 
     //findByActiveTrue
     //findByActiveFalse
@@ -133,12 +136,6 @@ public class QueryMethodsRestController {
         return iQueryMethodsService.findByClaimAmountLessThanEqual(claimAmount);
     }
 
-    @GetMapping("/claimAmountGreaterThanEqual")
-    public List<CropInsurance> findByClaimAmountGreaterThanEqual(
-            @RequestParam(defaultValue = "1000") int claimAmount) {
-        return iQueryMethodsService.findByClaimAmountGreaterThanEqual(claimAmount);
-    }
-
     @GetMapping("/intRegionNull")
     public List<CountriesEntity> findByIntRegionNull() {
         return iQueryMethodsService.findByIntRegionNull();
@@ -207,6 +204,59 @@ public class QueryMethodsRestController {
             System.out.println("amountIn:=" + amount);
         }
         return iQueryMethodsService.findByClaimAmountNotInOrderByClaimAmount(amountIn);
+    }
+
+    @GetMapping("/list/case")
+    public List<CropInsurance> findByMandalNameIgnoreCase(@RequestParam(defaultValue = "BUKKAPATNAM") String mandal) {
+        return commonService.findByMandalNameIgnoreCase(mandal);
+    }
+
+    @GetMapping("/list/contain")
+    public List<CropInsurance> findByMandalNameContainingIgnoreCase(@RequestParam(defaultValue = "NALLAMADA") String mandal) {
+        return commonService.findByMandalNameContainingIgnoreCase(mandal);
+    }
+
+    @GetMapping("/list/and")
+    public List<CropInsurance> findByMandalNameIgnoreCaseAndCropIgnoreCase(
+            @RequestParam(defaultValue = "Nallamada") String mandal,
+            @RequestParam(defaultValue = "Groundnut (Pea Nut) - RF") String crop) {
+        return commonService.findByMandalNameIgnoreCaseAndCropIgnoreCase(mandal, crop);
+    }
+
+    @GetMapping("/list/greater")
+    public List<CropInsurance> findByClaimAmountGreaterThanEqual(
+            @RequestParam(defaultValue = "1000") int start) {
+        return commonService.findByClaimAmountGreaterThanEqual(start);
+    }
+
+    @GetMapping("/list/between")
+    public List<CropInsurance> findByClaimAmountBetweenOrderByClaimAmount(
+            @RequestParam(defaultValue = "9900") int start,
+            @RequestParam(defaultValue = "10000") int end) {
+        return commonService.findByClaimAmountBetweenOrderByClaimAmount(start, end);
+    }
+
+    @GetMapping("/list/greaterAndLess")
+    public List<CropInsurance> findByClaimAmountGreaterThanEqualLessThanEqual(
+            @RequestParam(defaultValue = "1000") int start,
+            @RequestParam(defaultValue = "10000") int end) {
+        return commonService.findByClaimAmountGreaterThanEqualLessThanEqual(start, end);
+    }
+
+    @GetMapping("/list/{amountIn}")
+    public List<CropInsurance> findByClaimAmountIn(
+            @PathVariable List<Integer> amountIn) {
+        for (Integer amount : amountIn) {
+            System.out.println("amountIn:=" + amount);
+        }
+        return commonService.findByClaimAmountInOrderByClaimAmount(amountIn);
+    }
+
+    @GetMapping(value = "/between/{mandal}/{crop}")
+    public List<CropInsurance> findByRollNumberBetween(
+            @PathVariable String mandal,
+            @PathVariable String crop) {
+        return commonService.findByMandalNameIgnoreCaseAndCropIgnoreCase(mandal, crop);
     }
 
 }

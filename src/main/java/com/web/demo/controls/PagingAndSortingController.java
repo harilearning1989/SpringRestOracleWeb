@@ -2,8 +2,8 @@ package com.web.demo.controls;
 
 import com.web.demo.entities.City;
 import com.web.demo.entities.CountriesEntity;
+import com.web.demo.services.CommonService;
 import com.web.demo.services.EmployeeService;
-import com.web.demo.services.ICityService;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class PagingAndSortingController {
     @Autowired
     private EmployeeService service;
     @Autowired
-    private ICityService cityService;
+    private CommonService commonService;
 
     @GetMapping("defaultSort")
     public ResponseEntity<List<CountriesEntity>> getAllEmployees(
@@ -40,6 +40,7 @@ public class PagingAndSortingController {
 
         return new ResponseEntity<List<CountriesEntity>>(list, new HttpHeaders(), HttpStatus.OK);
     }
+
     @GetMapping("descendSort")
     public ResponseEntity<List<CountriesEntity>> getAllEmployeesDescending(
             @RequestParam(defaultValue = "0") Integer pageNo,
@@ -58,6 +59,7 @@ public class PagingAndSortingController {
 
         return new ResponseEntity<List<CountriesEntity>>(list, new HttpHeaders(), HttpStatus.OK);
     }
+
     @GetMapping("sortOnly")
     public ResponseEntity<List<CountriesEntity>> getEmpSortingOnly(
             @RequestParam(defaultValue = "name") String first,
@@ -72,11 +74,13 @@ public class PagingAndSortingController {
         List<CountriesEntity> list = service.getEmpSortOrder();
         return new ResponseEntity<List<CountriesEntity>>(list, new HttpHeaders(), HttpStatus.OK);
     }
+
     @GetMapping("nullsLast")
     public ResponseEntity<List<CountriesEntity>> getEmpSortNullsLast() {
         List<CountriesEntity> list = service.getEmpSortNullsLast();
         return new ResponseEntity<List<CountriesEntity>>(list, new HttpHeaders(), HttpStatus.OK);
     }
+
     @GetMapping("nullsFirst")
     public ResponseEntity<List<CountriesEntity>> getEmpSortNullsFirst() {
         List<CountriesEntity> list = service.getEmpSortNullsFirst();
@@ -85,11 +89,11 @@ public class PagingAndSortingController {
 
     @GetMapping(value = "/cities")
     public List<City> getCitiesByPopulation() {
-        return cityService.findAllOrderByPopulationAsc();
+        return commonService.findAllOrderByPopulationAsc();
     }
 
     @GetMapping(value = "/cities2")
     public List<City> getCitiesByName(@RequestParam(defaultValue = "name") String name) {
-        return cityService.findAllOrderByNameAsc(name);
+        return commonService.findAllOrderByNameAsc(name);
     }
 }

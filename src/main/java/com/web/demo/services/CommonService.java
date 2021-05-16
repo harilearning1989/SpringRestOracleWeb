@@ -1,12 +1,15 @@
 package com.web.demo.services;
 
-import com.web.demo.entities.CropInsurance;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.web.demo.entities.*;
 
-import java.util.Collection;
+import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-public interface ICropInsuranceService {
+public interface CommonService {
+
+    public Iterable<CountriesEntity> getAllCountries();
+
     Iterable<CropInsurance> getAllCropInsurance();
     List<CropInsurance> getByMandal(String mandal);
     List<CropInsurance> findByMandalNameIgnoreCase(String mandal);
@@ -16,5 +19,16 @@ public interface ICropInsuranceService {
     List<CropInsurance> findByClaimAmountBetweenOrderByClaimAmount(int start,int end);
     List<CropInsurance> findByClaimAmountGreaterThanEqualLessThanEqual(int start,int end);
     public List<CropInsurance> findByClaimAmountInOrderByClaimAmount(List<Integer> claimAmount);
+
+    List<IndiaStates> getAllStates();
+
+    List<IndiaStates> findByStateNameIgnoreCase(String state);
+
+    public CompletableFuture<List<Car>> saveCars(InputStream inputStream) throws Exception;
+
+    public CompletableFuture<List<Car>> getAllCars();
+
+    List<City> findAllOrderByPopulationAsc();
+    List<City> findAllOrderByNameAsc(String name);
 
 }

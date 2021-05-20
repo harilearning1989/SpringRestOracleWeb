@@ -3,9 +3,9 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <div sec:authorize="isAuthenticated()">
-	Welcome <b><span sec:authentication="name">Username</span></b>
-	&nbsp;
-	<i><span sec:authentication="principal.authorities">Roles</span></i>
+	Welcome <b><sec:authentication property="principal.username" />
+	&nbsp;</br>
+	<sec:authentication property="principal.authorities" />
 </div>
 
 <form action="/logout" method="post">

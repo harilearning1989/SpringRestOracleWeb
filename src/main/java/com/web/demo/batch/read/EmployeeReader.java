@@ -1,6 +1,6 @@
 package com.web.demo.batch.read;
 
-import com.web.demo.dto.EmployeeDTO;
+import com.web.demo.dtos.EmployeeDTO;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;

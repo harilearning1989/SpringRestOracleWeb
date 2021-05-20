@@ -1,6 +1,8 @@
 package com.web.demo.services;
 
 import com.web.demo.dto.*;
+import com.web.demo.dtos.EmployeeDTO;
+import com.web.demo.dtos.StudentDTO;
 
 import java.util.List;
 

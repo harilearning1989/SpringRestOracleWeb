@@ -1,6 +1,8 @@
 package com.web.demo.controls;
 
 import com.web.demo.dto.*;
+import com.web.demo.dtos.EmployeeDTO;
+import com.web.demo.dtos.StudentDTO;
 import com.web.demo.services.AsyncService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

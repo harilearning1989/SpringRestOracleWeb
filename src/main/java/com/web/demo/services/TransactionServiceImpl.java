@@ -1,6 +1,6 @@
 package com.web.demo.services;
 
-import com.web.demo.dto.EmployeeDTO;
+import com.web.demo.dtos.EmployeeDTO;
 import com.web.demo.entities.Employee;
 import com.web.demo.entities.EmployeeHealthInsurance;
 import com.web.demo.exception.InvalidInsuranceAmountException;

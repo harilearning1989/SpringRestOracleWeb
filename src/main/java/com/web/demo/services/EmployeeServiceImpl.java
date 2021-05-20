@@ -2,6 +2,8 @@ package com.web.demo.services;
 
 import com.web.demo.entities.CountriesEntity;
 import com.web.demo.entities.Employee;
+import com.web.demo.entities.EmployeeAudit;
+import com.web.demo.repos.EmployeeAuditRepo;
 import com.web.demo.repos.EmployeeRepo;
 import com.web.demo.repos.ISortingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +24,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeRepo repo;
+    @Autowired
+    private EmployeeAuditRepo employeeAuditRepo;
 
     @Override
     @Cacheable(value = "employees", key = "#employee", unless = "#result.followers < 12000")
@@ -28,7 +34,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
     @Override
     public void save(Employee employee) {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = null;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
         repo.save(employee);
+        EmployeeAudit employeeAudit = new EmployeeAudit();
+        employeeAudit.setFirstName(employee.getFirstName());
+        employeeAudit.setLastName(employee.getLastName());
+        employeeAudit.setCompName(employee.getCompanyName());
+        employeeAudit.setCreatedBy(username);
+        employeeAudit.setModifiedBy(username);
+        employeeAuditRepo.save(employeeAudit);
     }
     @Override
     public Employee get(Integer id) {

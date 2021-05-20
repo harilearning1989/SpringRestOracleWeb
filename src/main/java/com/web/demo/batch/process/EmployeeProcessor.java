@@ -1,6 +1,6 @@
 package com.web.demo.batch.process;
 
-import com.web.demo.dto.EmployeeDTO;
+import com.web.demo.dtos.EmployeeDTO;
 import com.web.demo.entities.Employee;
 import com.web.demo.repos.EmployeeRepo;
 import org.springframework.batch.item.ItemProcessor;

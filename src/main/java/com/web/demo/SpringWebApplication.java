@@ -13,18 +13,21 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.transaction.Transactional;
 import java.net.InetAddress;
 import java.util.*;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class SpringWebApplication implements CommandLineRunner {
 
 	//http://localhost:8081/swagger-ui.html
 	//localhost:8082/SpringRestOracleDemo/swagger-ui.html#/  tomcat deployment
 	//http://192.168.1.200:8082/SpringRestOracleDemo/swagger-ui.html
 	//Redis   https://github.com/microsoftarchive/redis/releases
+    //https://www.codejava.net/frameworks/spring-boot/spring-boot-crud-example-with-spring-mvc-spring-data-jpa-thymeleaf-hibernate-mysql
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SpringWebApplication.class);
 	@Autowired

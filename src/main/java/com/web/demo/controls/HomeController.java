@@ -2,18 +2,29 @@ package com.web.demo.controls;
 
 import com.web.demo.dtos.EmployeeDTO;
 import com.web.demo.entities.Employee;
+import com.web.demo.entities.MyUserDetails;
 import com.web.demo.repos.EmployeeRepo;
 import com.web.demo.services.CSVReadService;
 import com.web.demo.services.EmployeeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -21,6 +32,8 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 @Controller
 public class HomeController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
 
     @Value("${fullName}")
     private String fullName;
@@ -35,6 +48,9 @@ public class HomeController {
 
     @Autowired
     private EmployeeService service;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String showLoginPage(ModelMap model) {
@@ -92,25 +108,39 @@ public class HomeController {
     }
 
     @RequestMapping("/")
-    public String viewHomePage(Model model) {
+    public String viewHomePage(Model model,
+                               Principal principal,
+                               Authentication authentication,
+                               HttpServletRequest request,
+                               @AuthenticationPrincipal MyUserDetails myUserDetails) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        System.out.println("User has authorities: " + userDetails.getAuthorities());
+
+        Principal principalServlet = request.getUserPrincipal();
+
+        String userName = myUserDetails.getUsername();
+        UserDetails user = userDetailsService.loadUserByUsername(userName);
+
         List<Employee> listEmployee = employeeRepo.findAll();
         model.addAttribute("listEmployee", listEmployee);
 
         return "employeeView";
     }
 
-    @RequestMapping("/new")
-    public String showNewProductForm(Model model) {
-        Employee employee = new Employee();
-        model.addAttribute("employee", employee);
+    @RequestMapping(value = "/authPrinciple",method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody UserDetails authPrinciple(@AuthenticationPrincipal UserDetails userDetails) {
+        return userDetails;
+    }
 
-        return "new_product";
+    @RequestMapping("/new")
+    public ModelAndView showNewProductForm() {
+        return new ModelAndView("new_product", "command", new Employee());
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String saveProduct(@ModelAttribute("employee") Employee employee) {
         service.save(employee);
-
         return "redirect:/";
     }
 
@@ -129,6 +159,44 @@ public class HomeController {
         service.delete(id);
 
         return "redirect:/";
+    }
+
+    @RequestMapping("/helloWorld")
+    public String helloWorldJquery(Map<String, Object> model) {
+        LOGGER.info("CommonWebController===helloWorldJquery()==");
+        model.put("message", "HowToDoInJava Reader !!");
+
+        return "HelloWorldJquery";
+    }
+
+    @RequestMapping("/emp")
+    public String empDataTable() {
+        LOGGER.info("CommonWebController===empDataTable()==");
+        return "dataTable";
+    }
+
+    @RequestMapping("/dataTable")
+    public String empDataTableOffline() {
+        LOGGER.info("CommonWebController===empDataTableOffline()==");
+        return "dataTableOffline";
+    }
+
+    @RequestMapping("/export")
+    public String dataTableExports() {
+        LOGGER.info("CommonWebController===dataTableExports()==");
+        return "dataTableExports";
+    }
+
+    @RequestMapping("/countriesTable")
+    public String dataTableCountries() {
+        LOGGER.info("CommonWebController===dataTableCountries()==");
+        return "dataTableCountries";
+    }
+
+    @RequestMapping("/widgets")
+    public String jqueryWidgets() {
+        LOGGER.info("CommonWebController===jqueryWidgets()==");
+        return "JQueryWidgets";
     }
 
 }

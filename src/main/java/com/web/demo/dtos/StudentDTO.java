@@ -1,5 +1,9 @@
 package com.web.demo.dtos;
 
+import com.web.demo.dto.CourseDTO;
+
+import java.util.List;
+
 public class StudentDTO {
 
     private int studentId;
@@ -8,6 +12,19 @@ public class StudentDTO {
     private String gender;
     private String mobile;
     private String category;
+    private List<CourseDTO> courses;
+
+    public StudentDTO() {
+    }
+
+    public StudentDTO(int id, String name, String fatherName,
+                      List<CourseDTO> courses) {
+        super();
+        this.studentId = id;
+        this.studentName = name;
+        this.fatherName = fatherName;
+        this.courses = courses;
+    }
 
     public int getStudentId() {
         return studentId;
@@ -55,5 +72,20 @@ public class StudentDTO {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public List<CourseDTO> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<CourseDTO> courses) {
+        this.courses = courses;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Student [id=%s, name=%s, description=%s, courses=%s]", studentId,
+                studentName, fatherName, courses);
     }
 }

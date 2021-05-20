@@ -4,7 +4,7 @@ import com.web.demo.batch.listen.EmployeeJobListener;
 import com.web.demo.batch.process.EmployeeProcessor;
 import com.web.demo.batch.read.EmployeeReader;
 import com.web.demo.batch.write.EmployeeWriter;
-import com.web.demo.dto.EmployeeDTO;
+import com.web.demo.dtos.EmployeeDTO;
 import com.web.demo.entities.Employee;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;

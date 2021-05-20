@@ -1,6 +1,6 @@
 package com.web.demo.batch.process;
 
-import com.web.demo.dto.StudentDTO;
+import com.web.demo.dtos.StudentDTO;
 import com.web.demo.entities.Student;
 import com.web.demo.reposDev.StudentRepository;
 import org.springframework.batch.item.ItemProcessor;

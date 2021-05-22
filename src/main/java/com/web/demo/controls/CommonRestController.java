@@ -1,6 +1,7 @@
 package com.web.demo.controls;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.web.demo.dto.AllCountriesRegion;
 import com.web.demo.dto.CountriesDTO;
 import com.web.demo.dto.EmployeeDto;
 import com.web.demo.entities.Car;
@@ -39,7 +40,7 @@ public class CommonRestController {
     private CommonService commonService;
 
     @RequestMapping(value = "/employee", method = RequestMethod.GET)
-    public List<EmployeeDto> getCSVEmployeeData() throws IOException{
+    public List<EmployeeDto> getCSVEmployeeData() throws IOException {
         LOGGER.info("EmployeeRestController===empDataTable()==");
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         InputStream inputStream = loader.getResourceAsStream("1000EmployeeData.csv");
@@ -99,23 +100,24 @@ public class CommonRestController {
                 }
             }
         }
-        System.out.println("humanDtoList.size()====="+humanDtoList.size());
+        System.out.println("humanDtoList.size()=====" + humanDtoList.size());
         return humanDtoList;
     }
 
     @RequestMapping(value = "/countries", method = RequestMethod.GET)
-    public CountriesDTO getCountriesData() throws IOException {
+    public List<CountriesDTO> getCountriesData() throws IOException {
         LOGGER.info("JSONRestController=====getCountriesData()======info===");
         ObjectMapper objectMapper = new ObjectMapper();
 
         Resource resource = new ClassPathResource("countries.json");
         File file = resource.getFile();
 
-        CountriesDTO customer = objectMapper.readValue(file, CountriesDTO.class);
-        return customer;
+        AllCountriesRegion customer = objectMapper.readValue(file, AllCountriesRegion.class);
+        List<CountriesDTO> country = customer.getCountries();
+        return country;
     }
 
-    @GetMapping("/countries/list")
+    @GetMapping(value = "/countries/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CountriesEntity>> getAllCountries() {
         try {
             List<CountriesEntity> countries = new ArrayList<CountriesEntity>();
@@ -162,6 +164,7 @@ public class CommonRestController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/state")
     public List<IndiaStates> findByState(
             @RequestParam(defaultValue = "ANDHRA PRADESH") String state) {

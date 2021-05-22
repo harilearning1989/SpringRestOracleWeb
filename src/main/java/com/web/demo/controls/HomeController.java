@@ -97,25 +97,6 @@ public class HomeController {
         return "empView";
     }
 
-    @GetMapping(value = "/agGridFaker")
-    public String agGridFakerExample() {
-        return "agGridFaker";
-    }
-
-    @GetMapping(value = "/agGridExample")
-    public String agGridExample(ModelMap model) {
-        CompletableFuture<List<EmployeeDTO>> empFuture =
-                supplyAsync(() -> csvReadService.readEmployeeInfo());
-        try {
-            model.addAttribute("empDataList", empFuture.get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return "agGridExample";
-    }
-
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage(@RequestParam(value = "error", required = false) String error,
                             @RequestParam(value = "logout", required = false) String logout,
@@ -232,4 +213,31 @@ public class HomeController {
         return "JQueryWidgets";
     }
 
+    @GetMapping(value = "/agGridFaker")
+    public String agGridFakerExample() {
+        return "agGridFaker";
+    }
+
+    @GetMapping(value = "/agGridExample")
+    public String agGridExample(ModelMap model) {
+        CompletableFuture<List<EmployeeDTO>> empFuture =
+                supplyAsync(() -> csvReadService.readEmployeeInfo());
+        try {
+            model.addAttribute("empDataList", empFuture.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return "agGridExample";
+    }
+
+    @RequestMapping(value = "/agGridHelloWorld", method = RequestMethod.GET)
+    public String agGridHelloWorld() {
+        return "agGridHelloWorld";
+    }
+    @RequestMapping(value = "/agGridServerData", method = RequestMethod.GET)
+    public String agGridServerData() {
+        return "agGridEmployee";
+    }
 }

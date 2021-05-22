@@ -15,7 +15,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		var table = $('#countriesTable').DataTable({
-			"sAjaxSource" : "/common/countries",
+			"sAjaxSource" : "/common/employee",
 			"sAjaxDataProp" : "",
 			"order" : [ [ 0, "asc" ] ],
 			"aoColumns" : [ {

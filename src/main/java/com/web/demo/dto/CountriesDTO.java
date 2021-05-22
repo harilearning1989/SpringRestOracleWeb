@@ -1,5 +1,22 @@
 package com.web.demo.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "name",
+        "alpha2",
+        "alpha3",
+        "countrycode",
+        "iso_31662",
+        "region",
+        "subregion",
+        "intermediateregion",
+        "regioncode",
+        "subregioncode",
+        "intermediateregioncode"
+})
 public class CountriesDTO {
 
     private String name;

@@ -1,16 +1,21 @@
 package com.web.demo.security;
 
 import com.web.demo.services.UserDetailsServiceImpl;
-import org.springframework.context.annotation.*;
-import org.springframework.security.authentication.dao.*;
-import org.springframework.security.config.annotation.authentication.builders.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.*;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -39,6 +44,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //auth.inMemoryAuthentication().withUser("Mouni").password("mouni").roles("USER");
         //.password("{noop}pass")
         auth.authenticationProvider(authenticationProvider());
+    }
+    @Bean( name = "/accessDenied" )
+    public AccessDeniedHandler customAccessDenied() {
+        return new CustomAccessDeniedHandler();
     }
 
     @Override
@@ -69,10 +78,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .and()
-                .exceptionHandling().accessDeniedPage("/403")
+                //.exceptionHandling()
+                //.accessDeniedPage("/accessDenied.jsp")
+                //.accessDeniedHandler(customAccessDenied())
+                //.accessDeniedPage("/403")
+                .exceptionHandling().accessDeniedHandler(customAccessDenied())
+                .and()
+                .exceptionHandling().authenticationEntryPoint(new CustomHttp403ForbiddenEntryPoint())
                 .and()
                 .csrf()
-                .disable()
-        ;
+                .disable();
     }
 }

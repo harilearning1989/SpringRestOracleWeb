@@ -30,6 +30,8 @@
 	<h2># This user is login by username / password.</h2>
 </sec:authorize>
 
+<a href="/helloWorld">Hello World</a>
+
 <table border="2" width="70%" cellpadding="2">
 	<tr>
 		<th>First Name</th>

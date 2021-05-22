@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -59,6 +60,29 @@ public class HomeController {
         return "home";
     }
 
+    @RequestMapping(value = "/403", method = RequestMethod.GET)
+    public ModelAndView accesssDenied(Principal user) {
+        ModelAndView model = new ModelAndView();
+        if (user != null) {
+            model.addObject("msg", "Hi " + user.getName()+ ", You can not access this page!");
+        } else {
+            model.addObject("msg","You can not access this page!");
+        }
+        model.setViewName("accessDenied");
+        return model;
+    }
+
+    @RequestMapping(value = "/accessDenied", method = RequestMethod.GET)
+    public ModelAndView getAccessDenied(@AuthenticationPrincipal UserDetails user) {
+        ModelAndView model = new ModelAndView();
+        if (user != null) {
+            model.addObject("msg", "Hi " + user.getUsername()+ ", You can not access this page!");
+        } else {
+            model.addObject("msg","You can not access this page!");
+        }
+        model.setViewName("accessDenied");
+        return model;
+    }
     @GetMapping(value = "/viewEmp")
     public String viewEmployeeDetails(ModelMap model) {
         CompletableFuture<List<EmployeeDTO>> empFuture =
@@ -127,9 +151,10 @@ public class HomeController {
         return "employeeView";
     }
 
-    @RequestMapping(value = "/authPrinciple",method = RequestMethod.GET,
+    @RequestMapping(value = "/authPrinciple", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody UserDetails authPrinciple(@AuthenticationPrincipal UserDetails userDetails) {
+    public @ResponseBody
+    UserDetails authPrinciple(@AuthenticationPrincipal UserDetails userDetails) {
         return userDetails;
     }
 
@@ -154,6 +179,7 @@ public class HomeController {
         return mav;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping("/delete/{id}")
     public String deleteProduct(@PathVariable(name = "id") Integer id) {
         service.delete(id);
@@ -161,12 +187,19 @@ public class HomeController {
         return "redirect:/";
     }
 
-    @RequestMapping("/helloWorld")
+    @PreAuthorize("hasAnyAuthority('ADMIN','CREATOR')")
+    @RequestMapping(value = "/helloWorld", method = RequestMethod.GET)
     public String helloWorldJquery(Map<String, Object> model) {
         LOGGER.info("CommonWebController===helloWorldJquery()==");
         model.put("message", "HowToDoInJava Reader !!");
 
         return "HelloWorldJquery";
+    }
+
+    @PreAuthorize("#username == authentication.principal.username")
+    public String getMyRoles(String username) {
+        //...
+        return username;
     }
 
     @RequestMapping("/emp")

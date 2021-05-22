@@ -30,7 +30,7 @@
     	<h2># This user is login by username / password.</h2>
     </sec:authorize>
 
-    <a href="/countriesTable">CountriesTable</a>
+    <a href="/dataTableEmp">DataTableEmp</a>
 
     <a href="/helloWorld">Hello World</a>
     <a href="/agGridHelloWorld">AgGridHelloWorld</a>

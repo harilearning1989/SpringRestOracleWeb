@@ -14,9 +14,28 @@
 	
 <script type="text/javascript">
 	$(document).ready(function() {
-		var table = $('#countriesTable').DataTable({
+
+	 // Setup - add a text input to each footer cell
+        $('#empTable thead tr').clone(true).appendTo( '#empTable thead' );
+        $('#empTable thead tr:eq(1) th').each( function (i) {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+
+            $( 'input', this ).on( 'keyup change', function () {
+                if ( table.column(i).search() !== this.value ) {
+                    table
+                        .column(i)
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+
+		var table = $('#empTable').DataTable({
 			"sAjaxSource" : "/common/employee",
 			"sAjaxDataProp" : "",
+			orderCellsTop: true,
+            fixedHeader: true,
 			"order" : [ [ 0, "asc" ] ],
 			"aoColumns" : [ {
 				"mData" : "empID"
@@ -37,7 +56,7 @@
 
 </head>
 <body>
-	<table id="countriesTable" class="display">
+	<table id="empTable" class="display">
 
 		<!-- Header Table -->
 		<thead>

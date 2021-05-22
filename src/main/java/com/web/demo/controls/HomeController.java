@@ -201,10 +201,10 @@ public class HomeController {
         return "dataTableExports";
     }
 
-    @RequestMapping("/countriesTable")
+    @RequestMapping("/dataTableEmp")
     public String dataTableCountries() {
         LOGGER.info("CommonWebController===dataTableCountries()==");
-        return "dataTableCountries";
+        return "dataTableEmp";
     }
 
     @RequestMapping("/widgets")

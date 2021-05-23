@@ -31,6 +31,7 @@
     </sec:authorize>
 
     <a href="/dataTableEmp">DataTableEmp</a>
+    <a href="/ajaxMethods">AjaxMethods</a>
 
     <a href="/helloWorld">Hello World</a>
     <a href="/agGridHelloWorld">AgGridHelloWorld</a>

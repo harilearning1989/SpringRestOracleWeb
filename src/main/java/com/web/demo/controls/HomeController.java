@@ -206,6 +206,10 @@ public class HomeController {
         LOGGER.info("CommonWebController===dataTableCountries()==");
         return "dataTableEmp";
     }
+    @RequestMapping("/ajaxMethods")
+    public String ajaxMethods() {
+        return "ajaxMethods";
+    }
 
     @RequestMapping("/widgets")
     public String jqueryWidgets() {

@@ -48,6 +48,10 @@ public class PlsqlRestController {
     public String getFirstName(@RequestParam(required = false, defaultValue = "1") Integer empId) {
         return employeeRepo.getFirstName(empId);
     }
+    @GetMapping(value = "/getAllFirstName")
+    public String getAllFirstNames(@RequestParam(required = false, defaultValue = "1") Integer empId) {
+        return employeeRepo.getAllFirstNames(empId);
+    }
 
     @GetMapping(value = "/savePerson")
     public String savePerson() {

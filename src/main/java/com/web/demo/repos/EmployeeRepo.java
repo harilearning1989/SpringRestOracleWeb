@@ -20,4 +20,7 @@ public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 
     @Query(nativeQuery = true, value = "SELECT PKG_TEST.GET_FIRST_NAME(:empId) FROM dual")
     String getFirstName(@Param("empId") int empId);
+
+    @Query(nativeQuery = true, value = "SELECT PKG_TEST.GET_FIRST_NAME(:empId) FROM dual")
+    String getAllFirstNames(@Param("empId") int empId);
 }

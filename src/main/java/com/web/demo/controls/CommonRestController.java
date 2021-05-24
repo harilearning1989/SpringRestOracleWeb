@@ -30,7 +30,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 @RestController
-@RequestMapping("common")
+@RequestMapping("/common")
 @Api(value = "CommonRestController")
 public class CommonRestController {
 
@@ -38,6 +38,11 @@ public class CommonRestController {
 
     @Autowired
     private CommonService commonService;
+
+    @GetMapping("/hello")
+    public @ResponseBody String helloWorld() {
+        return "Hello World!";
+    }
 
     @RequestMapping(value = "/employee", method = RequestMethod.GET)
     public List<EmployeeDto> getCSVEmployeeData() throws IOException {

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Scheduler {
-    @Scheduled(fixedRate = 1000,initialDelay = 300000)
+    @Scheduled(fixedRate = 1000,initialDelay = 200000)
     public void fixedRateSch() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
@@ -15,7 +15,7 @@ public class Scheduler {
         String strDate = sdf.format(now);
         System.out.println("Fixed Rate scheduler:: " + strDate);
     }
-    @Scheduled(fixedDelay = 10000, initialDelay = 100000)
+    @Scheduled(fixedDelay = 10000, initialDelay = 200000)
     public void fixedDelaySch() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         Date now = new Date();

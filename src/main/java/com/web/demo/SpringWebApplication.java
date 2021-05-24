@@ -14,6 +14,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.transaction.Transactional;
 import java.net.InetAddress;
@@ -21,6 +22,7 @@ import java.util.*;
 
 @SpringBootApplication//(exclude = WebSecurityConfig.class)
 @EnableJpaAuditing
+@EnableScheduling
 public class SpringWebApplication implements CommandLineRunner {
 
     //http://localhost:8081/swagger-ui.html

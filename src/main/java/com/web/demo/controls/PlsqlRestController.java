@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
@@ -37,6 +38,16 @@ public class PlsqlRestController {
 
     @Autowired
     private PersonRepository repo;
+
+    @GetMapping(value = "/callHelloWorld")
+    public String callHelloWorld(@RequestParam(defaultValue = "Hari") String name) {
+        return employeeRepo.callHelloWorld(name);
+    }
+
+    @GetMapping(value = "/getFirstName")
+    public String getFirstName(@RequestParam(required = false, defaultValue = "1") Integer empId) {
+        return employeeRepo.getFirstName(empId);
+    }
 
     @GetMapping(value = "/savePerson")
     public String savePerson() {

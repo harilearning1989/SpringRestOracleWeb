@@ -1,5 +1,6 @@
 package com.web.demo.controls;
 
+import com.web.demo.dto.NestedTable;
 import com.web.demo.entities.CropInsurance;
 import com.web.demo.entities.Person;
 import com.web.demo.repos.EmployeeRepo;
@@ -48,9 +49,19 @@ public class PlsqlRestController {
     public String getFirstName(@RequestParam(required = false, defaultValue = "1") Integer empId) {
         return employeeRepo.getFirstName(empId);
     }
-    @GetMapping(value = "/getAllFirstName")
-    public String getAllFirstNames(@RequestParam(required = false, defaultValue = "1") Integer empId) {
+    @GetMapping(value = "/getAllFirstNames")
+    public List<String> getAllFirstNames(@RequestParam(required = false, defaultValue = "5") Integer empId) {
         return employeeRepo.getAllFirstNames(empId);
+    }
+
+    @GetMapping(value = "/callNestedTableFunc")
+    public List<String> callNestedTableFunc(@RequestParam(required = false, defaultValue = "5") Integer empId) {
+        return employeeRepo.callNestedTableFunc();
+    }
+
+    @GetMapping(value = "/callNestedTableMultiFunc")
+    public List<NestedTable> callNestedTableMultiFunc(@RequestParam(required = false, defaultValue = "5") Integer empId) {
+        return employeeRepo.callNestedTableMultiFunc();
     }
 
     @GetMapping(value = "/savePerson")

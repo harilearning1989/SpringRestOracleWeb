@@ -1,5 +1,6 @@
 package com.web.demo.services;
 
+import com.web.demo.dto.UserDto;
 import com.web.demo.entities.CountriesEntity;
 import com.web.demo.entities.Employee;
 
@@ -20,4 +21,5 @@ public interface EmployeeService {
     List<CountriesEntity> getEmpSortOrder();
     List<CountriesEntity> getEmpSortNullsLast();
     List<CountriesEntity> getEmpSortNullsFirst();
+    List<UserDto> findByUserNameOrEmail(String username);
 }

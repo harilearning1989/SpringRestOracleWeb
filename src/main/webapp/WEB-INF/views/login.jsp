@@ -18,7 +18,7 @@
 }
 </style>
 </head>
-<body align="center">
+<body align="center" style="width: 100%;height:100%;background-color: lightblue;">
     </br></br></br></br></br></br></br>
 
 <div id="login-box" align="center">

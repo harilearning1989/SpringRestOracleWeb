@@ -97,3 +97,8 @@ IS
 BEGIN
   OPEN history_cursor FOR SELECT * FROM PERSON_HISTORY;
 END;
+
+--========================================================
+CREATE TYPE person_obj AS OBJECT(id NUMBER(7), name VARCHAR2(100));
+CREATE TYPE person_array AS VARRAY(10) OF person_obj;
+SELECT * FROM TABLE(person_array(person_obj(1, 'Jim'),person_obj(2, 'Joe')));

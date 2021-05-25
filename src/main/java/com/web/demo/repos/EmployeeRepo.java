@@ -1,5 +1,6 @@
 package com.web.demo.repos;
 
+import com.web.demo.dto.NestedTable;
 import com.web.demo.entities.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +22,12 @@ public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
     @Query(nativeQuery = true, value = "SELECT PKG_TEST.GET_FIRST_NAME(:empId) FROM dual")
     String getFirstName(@Param("empId") int empId);
 
-    @Query(nativeQuery = true, value = "SELECT PKG_TEST.GET_FIRST_NAME(:empId) FROM dual")
-    String getAllFirstNames(@Param("empId") int empId);
+    @Query(nativeQuery = true, value = "SELECT PKG_TEST.GET_ALL_FIRST_NAMES(:empId) FROM dual")
+    List<String> getAllFirstNames(@Param("empId") int empId);
+
+    @Query(nativeQuery = true, value = "SELECT COLUMN_VALUE FROM TABLE (PKG_TEST.tabfunc_concat ()) ORDER BY COLUMN_VALUE")
+    List<String> callNestedTableFunc();
+
+    @Query(nativeQuery = true, value = "SELECT new com.web.demo.dto.NestedTable(employee_id,last_name) FROM TABLE(PKG_TEST.tabfunc_no_concat())")
+    List<NestedTable> callNestedTableMultiFunc();
 }

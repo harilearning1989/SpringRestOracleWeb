@@ -1,9 +1,12 @@
 package com.web.demo.controls;
 
+import com.web.demo.dto.SearchCriteria;
+import com.web.demo.dto.UserDto;
 import com.web.demo.dtos.EmployeeDTO;
 import com.web.demo.entities.Employee;
 import com.web.demo.entities.MyUserDetails;
 import com.web.demo.repos.EmployeeRepo;
+import com.web.demo.response.AjaxResponseBody;
 import com.web.demo.services.CSVReadService;
 import com.web.demo.services.EmployeeService;
 import org.slf4j.Logger;
@@ -11,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,15 +23,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
@@ -64,9 +71,9 @@ public class HomeController {
     public ModelAndView accesssDenied(Principal user) {
         ModelAndView model = new ModelAndView();
         if (user != null) {
-            model.addObject("msg", "Hi " + user.getName()+ ", You can not access this page!");
+            model.addObject("msg", "Hi " + user.getName() + ", You can not access this page!");
         } else {
-            model.addObject("msg","You can not access this page!");
+            model.addObject("msg", "You can not access this page!");
         }
         model.setViewName("accessDenied");
         return model;
@@ -76,13 +83,14 @@ public class HomeController {
     public ModelAndView getAccessDenied(@AuthenticationPrincipal UserDetails user) {
         ModelAndView model = new ModelAndView();
         if (user != null) {
-            model.addObject("msg", "Hi " + user.getUsername()+ ", You can not access this page!");
+            model.addObject("msg", "Hi " + user.getUsername() + ", You can not access this page!");
         } else {
-            model.addObject("msg","You can not access this page!");
+            model.addObject("msg", "You can not access this page!");
         }
         model.setViewName("accessDenied");
         return model;
     }
+
     @GetMapping(value = "/viewEmp")
     public String viewEmployeeDetails(ModelMap model) {
         CompletableFuture<List<EmployeeDTO>> empFuture =
@@ -206,6 +214,7 @@ public class HomeController {
         LOGGER.info("CommonWebController===dataTableCountries()==");
         return "dataTableEmp";
     }
+
     @RequestMapping("/ajaxMethods")
     public String ajaxMethods() {
         return "ajaxMethods";
@@ -240,6 +249,7 @@ public class HomeController {
     public String agGridHelloWorld() {
         return "agGridHelloWorld";
     }
+
     @RequestMapping(value = "/agGridServerData", method = RequestMethod.GET)
     public String agGridServerData() {
         return "agGridEmployee";

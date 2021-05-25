@@ -1,14 +1,14 @@
 package com.web.demo.controls;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.web.demo.dto.AllCountriesRegion;
-import com.web.demo.dto.CountriesDTO;
-import com.web.demo.dto.EmployeeDto;
+import com.web.demo.dto.*;
 import com.web.demo.entities.Car;
 import com.web.demo.entities.CountriesEntity;
 import com.web.demo.entities.CropInsurance;
 import com.web.demo.entities.IndiaStates;
+import com.web.demo.response.AjaxResponseBody;
 import com.web.demo.services.CommonService;
+import com.web.demo.services.EmployeeService;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,15 +19,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/common")
@@ -39,9 +42,36 @@ public class CommonRestController {
     @Autowired
     private CommonService commonService;
 
+    @Autowired
+    private EmployeeService service;
+
     @GetMapping("/hello")
-    public @ResponseBody String helloWorld() {
+    public @ResponseBody
+    String helloWorld() {
         return "Hello World!";
+    }
+
+    @PostMapping(value = "/api/search", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getSearchResultViaAjax(
+            @Valid @RequestBody SearchCriteria search, Errors errors) {
+
+        AjaxResponseBody result = new AjaxResponseBody();
+
+        if (errors.hasErrors()) {
+            result.setMsg(errors.getAllErrors()
+                    .stream().map(x -> x.getDefaultMessage())
+                    .collect(Collectors.joining(",")));
+            return ResponseEntity.badRequest().body(result);
+        }
+        List<UserDto> users = service.findByUserNameOrEmail(search.getUsername());
+        if (users.isEmpty()) {
+            result.setMsg("no user found!");
+        } else {
+            result.setMsg("success");
+        }
+        result.setResult(users);
+
+        return ResponseEntity.ok(result);
     }
 
     @RequestMapping(value = "/employee", method = RequestMethod.GET)

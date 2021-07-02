@@ -65,7 +65,7 @@ public class CommonRestController {
         }
         List<UserDto> users = service.findByUserNameOrEmail(search.getUsername());
         if (users.isEmpty()) {
-            result.setMsg("no user found!");
+            result.setMsg("no user found!  no user found!");
         } else {
             result.setMsg("success");
         }
